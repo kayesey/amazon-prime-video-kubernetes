@@ -15,7 +15,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git 'https://github.com/kayesey/amazon-prime-video-kubernetes.git'
+                git branch: 'main', url: 'https://github.com/Aseemakram19/amazon-prime-video-kubernetes.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -48,8 +48,8 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                        sh "docker build -t amazon-prime-video ."
-                       sh "docker tag amazon-prime-video seyram83/amazon-prime-video:latest "
-                       sh "docker push seyram83/amazon-prime-video:latest "
+                       sh "docker tag amazon-prime-video aseemakram19/amazon-prime-video:latest "
+                       sh "docker push aseemakram19/amazon-prime-video:latest "
                     }
                 }
             }
@@ -58,9 +58,9 @@ pipeline{
             steps {
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                       sh 'docker-scout quickview seyram83/amazon-prime-video:latest'
-                       sh 'docker-scout cves seyram83/amazon-prime-video:latest'
-                       sh 'docker-scout recommendations seyram83/amazon-prime-video:latest'
+                       sh 'docker-scout quickview aseemakram19/amazon-prime-video:latest'
+                       sh 'docker-scout cves aseemakram19/amazon-prime-video:latest'
+                       sh 'docker-scout recommendations aseemakram19/amazon-prime-video:latest'
                    }
                 }
             }
@@ -68,12 +68,12 @@ pipeline{
 
         stage("TRIVY-docker-images"){
             steps{
-                sh "trivy image seyram83/amazon-prime-video:latest > trivyimage.txt" 
+                sh "trivy image aseemakram19/amazon-prime-video:latest > trivyimage.txt" 
             }
         }
         stage('App Deploy to Docker container'){
             steps{
-                sh 'docker run -d --name amazon-prime-video -p 3000:3000 seyram83/amazon-prime-video:latest'
+                sh 'docker run -d --name amazon-prime-video -p 3000:3000 aseemakram19/amazon-prime-video:latest'
             }
         }
 
@@ -94,7 +94,7 @@ pipeline{
                     <p>Started by: ${buildUser}</p>
                     <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
-                to: 'seyramkwameattah@gmail.com',
+                to: ' seyramkwameattah@gmail.com',
                 from: 'seyramkwameattah@gmail.com',
                 replyTo: 'seyramkwameattah@gmail.com',
                 mimeType: 'text/html',
